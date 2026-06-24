@@ -1,54 +1,62 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { ChevronDown, Search, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router";
+type propsType = {
+    isLoggedIn: boolean
+}
 
-// import { useNavigate } from 'react-router-dom';
-
-// const navigate = useNavigate();
-
-function Header() {
+function Header({ isLoggedIn }: propsType) {
     return (
-        <header className="bg-[#7E33E0] text-white flex items-center justify-between px-6 py-2 text-sm">
-
-            {/* Email + Phone */}
-            <div className="flex gap-6">
-                <div className="flex items-center gap-2">
-                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=4pM4OmHKW2G4&format=png&color=FFFFFF" />
-                    <p>mhhasanul@gmail.com</p>
+        <>
+            <header>
+                <div className="bg-primary-light">
+                    <div className="container flex justify-between py-4  text-white ">
+                        <div>
+                            <span className="mr-3">mer@gamil.com</span>
+                            <span>+977 9840234234</span>
+                        </div>
+                        <div className="flex">
+                            <Link to="/login">login</Link>
+                            {/* <a href="/login">login</a> */}
+                            <span>User</span>
+                            <ShoppingCart />
+                        </div>
+                    </div>
                 </div>
-
-                <div className="flex items-center gap-2">
-                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=BBf95mK0q8NH&format=png&color=FFFFFF" />
-                    <p>(12345)67890</p>
+                <div className="container flex items-center justify-between my-5">
+                    <Link
+                        to="/"
+                        className="text-[34px] font-semibold text-primary-dark font-josefin"
+                    >
+                        Hekto
+                    </Link>
+                    {/* <a href="/" className="text-[34px] font-semibold text-primary-dark">
+            Hekto
+          </a> */}
+                    <ul className="flex gap-9 capitalize">
+                        <li className="text-secondary">
+                            Home <ChevronDown size={16} className="inline-block" />
+                        </li>
+                        <li>
+                            {" "}
+                            <Link to={"/products"}>products</Link>
+                        </li>
+                        {isLoggedIn && (
+                            <>
+                                <li>Orders</li>
+                                <li>carts</li>
+                            </>
+                        )}
+                    </ul>
+                    <form className="flex items-center">
+                        <input className=" border-[#E7E6EF] border-2 " />
+                        <button className="text-white bg-secondary py-2 px-3">
+                            <Search className="" />
+                        </button>
+                    </form>
                 </div>
-            </div>
-
-            {/* Right Side */}
-            <div className="flex items-center gap-4">
-                <select className="bg-transparent border-none outline-none">
-                    <option>English</option>
-                    <option>Nepali</option>
-                    <option>Hindi</option>
-                </select>
-
-                <select className="bg-transparent border-none outline-none">
-                    <option>USD</option>
-                    <option>NPR</option>
-                    <option>INR</option>
-                </select>
-
-                <button
-                    className='hover:underline'>
-                    {/* Login */}
-                    <Link to="/login">login</Link>
-
-                </button>
-
-
-                <button>Wishlist</button>
-
-                <img className="w-6 h-6" src="https://img.icons8.com/?size=100&id=85080&format=png&color=FFFFFF" />
-            </div>
-        </header>
+            </header>
+        </>
     );
 }
 

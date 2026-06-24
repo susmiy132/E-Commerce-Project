@@ -1,41 +1,45 @@
 
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import SignUpForm from "./pages/SignUp";
-// import LoginForm from "./pages/Login";
-// import Home from "./pages/Home";
-
-// export default function App() {
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         {/* <Route path="/" element={<SignUpForm />} />
-//         <Route path="/login" element={<LoginForm />} /> */}
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
-import React from 'react'
+import React, { useState } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
-import SignUpForm from './pages/SignUp'
+import RootLayout from './components/layouts/RootLayout'
+import { Component } from 'lucide-react'
 import LoginForm from './pages/Login'
-import RootLayout from './components/layouts/Hero'
+import SignUpForm from './pages/SignUp'
+import ProductDetails from './pages/products/ProductDetails'
+import { ProductListing } from './pages/products/ProductListing'
 
 function App() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = createBrowserRouter([
     {
       path: "",
-      Component: RootLayout,
+
+      element: <RootLayout isLoggedIn={isLoggedIn} />,
       children: [
         { path: "/", Component: Home },
-        { path: "/login", Component: LoginForm },
+        {
+          path: "/login",
+          element: <LoginForm setIsLoggedIn={setIsLoggedIn} />
+        },
+        { path: "/register", Component: SignUpForm },
+        {
+          path: "/products",
+          children: [
+            {
+              path: "",
+              Component: ProductListing,
+            },
+            {
+              path: "detail",
+              Component: ProductDetails
 
-        { path: "/register", Component: SignUpForm }
+            }
+          ]
+        }
       ]
-    }
-  ])
+    }])
   return (
     <>
       <RouterProvider router={router} />
