@@ -25,13 +25,11 @@ export default function Home() {
 
             <div>
                 <div className="grid grid-cols-4 container">
-                    {[1, 2, 3, 4].map((el) => {
-                        return (
-                            <div className="border p-5">
-                                <p>Products</p>
-                            </div>
-                        );
-                    })}
+                    {[1, 2, 3, 4].map((el) => (
+                        <div key={el} className="border p-5">
+                            <p>Products</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>
