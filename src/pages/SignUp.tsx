@@ -1,107 +1,314 @@
-import React, { useState } from 'react';
-import { Form, Link } from 'react-router-dom';
-import BreadCrumb from "../components/BreadCrub";
+// import React, { useState } from 'react';
+// import { Form, Link } from 'react-router-dom';
+// import BreadCrumb from "../components/BreadCrumb";
+// import axios from "axios";
+
+// export default function SignUpForm() {
+//     const [form, setForm] = useState({
+//         firstName: "",
+//         lastName: "",
+//         email: "",
+//         password: "",
+//         isSeller: false,
+//     });
+
+//     const [loading, setLoading] = useState(false);
+//     const [error, setError] = useState("");
+
+//     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         const { name, value, type, checked } = e.target;
+//         setForm((prev) => ({
+//             ...prev,
+//             [name]: type === "checkbox" ? checked : value,
+//         }));
+//     };
+
+//     const handleSubmit = (e: React.FormEvent) => {
+//         e.preventDefault();
+//         setError("");
+//         setLoading(true);
+
+//         axios
+//             .post("https://ecom-zb9o.vercel.app/api/signup", form)
+//             .then((res) => {
+//                 console.log("Registration successfull", res.data);
+//             })
+//             .catch((err) => {
+//                 console.log("Error:", err.response?.data);
+//                 const msg = err.response?.data?.msg || "Something went wrong.";
+//                 setError(msg);
+//             })
+//             .finally(() => setLoading(false));
+//     };
+
+//     return (
+//         <>
+//             <BreadCrumb />
+//             <div className='py-12 bg-gray-100 flex items-center justify-center px-4'>
+//                 <div className='bg-white rounded-2xl shadow-sm p-10 w-full max-w-md'>
+//                     {/* { Header } */}
+//                     <div className='text-center mb-8'>
+//                         <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+//                             Create Account
+//                         </h1>
+
+//                         <p className='text-gray-400 text-sm'>
+//                             Fill in the details below to get sarted.
+//                         </p>
+//                     </div>
+
+//                     {error && (
+//                         <div className='mb-4 text-sm text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-3'>
+//                             {error}
+//                         </div>
+//                     )}
+
+//                     <form
+//                         onSubmit={handleSubmit}
+//                         className="space-y-4">
+//                         {/* <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+//                         <p>Please create an account using the details below.</p> */}
+
+//                         <div className='flex gap-3'>
+
+//                             <input
+//                                 type="text"
+//                                 name='firstName'
+//                                 placeholder="First Name"
+//                                 value={form.firstName}
+//                                 onChange={handleChange}
+//                                 required
+//                                 className="w-1/2 border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+//                             />
+
+//                             <input
+//                                 type="text"
+//                                 name='lastName'
+//                                 placeholder="Last Name"
+//                                 value={form.lastName}
+//                                 onChange={handleChange}
+//                                 aria-required
+//                                 className="w-1/2 border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+//                             />
+//                         </div>
+
+//                         <input
+//                             type="email"
+//                             name="email"
+//                             placeholder="Email"
+//                             value={form.email}
+//                             onChange={handleChange}
+//                             required
+//                             className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+//                         />
+
+
+//                         <input
+//                             type="password"
+//                             name="password"
+//                             placeholder="Password"
+//                             value={form.password}
+//                             onChange={handleChange}
+//                             required
+//                             className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+//                         />
+
+//                         {/* isSeller checkbox */}
+//                         <label className='flex items-center gap-3 cursor-pointer select-none group'>
+//                             <div className='relative flex items-center'>
+//                                 <input
+//                                     type="checkbox"
+//                                     name="isSeller"
+//                                     checked={form.isSeller}
+//                                     onChange={handleChange}
+//                                     className='peer sr-only'
+//                                 />
+
+//                                 {/* Custom checkbox */}
+//                                 <div className='w-5 h-5 rounded border border-gray-300 peer-checked:bg-secondary peer-checked:border-secondary transition-colors duration-200 flex items-center justify-center'>
+//                                     {form.isSeller && (
+//                                         <svg className='w-3 h-3 text-white'
+//                                             fill="none"
+//                                             viewBox='0 0 24 24'
+//                                             stroke="currentColor"
+//                                             strokeWidth={3}>
+//                                             <path strokeLinecap="round"
+//                                                 strokeLinejoin="round"
+//                                                 d="M5 1314 4L19 7"
+//                                             />
+//                                         </svg>
+//                                     )}
+//                                 </div>
+//                             </div>
+
+//                             <div>
+//                                 <span className='text-sm text-gray-700 font-medium'>
+//                                     Register as a Seller
+//                                 </span>
+//                                 <p className='text-xs text-gray-400 mt-0.5'>
+//                                     List and sell your own products on the platform.
+//                                 </p>
+//                             </div>
+//                         </label>
+//                         <button
+//                             type='submit'
+//                             disabled={loading}
+//                             className='w-full bg-secondary hover:bg-pink-600 disabled:opacity-60 text-white font-semibold py-3.5 rounded-lg transition-colors duration-200'>
+//                             {loading ? "Creating account..." : "Create Account"}
+//                         </button>
+//                     </form>
+//                     <p className='text-center text-sm text-gray-400 mt-6'>
+//                         Already have an account?(" ")
+//                         <a
+//                             href="/login"
+//                             className='text-secondary hover:underline font-medium'
+//                         >
+//                             Sign in
+//                         </a>
+//                     </p>
+//                 </div>
+//             </div >
+//         </>
+//     );
+// }
+
+
+
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import BreadCrumb from "../components/BreadCrumb";
 
 export default function SignUpForm() {
     const [form, setForm] = useState({
-        firstName: " ",
-        lastName: " ",
-        email: " ",
-        password: " ",
-        confirmPassword: " ",
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
         isSeller: false,
     });
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, checked, type } = e.target;
+
         setForm((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value,
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         setError("");
+        setSuccess("");
         setLoading(true);
 
-        axios
-            .post("https://ecom-zb9o.vercel.app/api/signup", form)
-            .then((res) => {
-                console.log("Registration successfull", res.data);
-            })
-            .catch((err) => {
-                const msg = err.response?.data?.msg || "Something went wrong.";
-                setError(msg);
-            })
-            .finally(() => setLoading(false));
+        const data = {
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+            email: form.email.trim().toLowerCase(),
+            password: form.password.trim(),
+            isSeller: form.isSeller,
+        };
+
+        console.log("Sending:", data);
+
+        try {
+            const res = await axios.post(
+                "https://ecom-zb9o.vercel.app/api/signup",
+                data
+            );
+
+            console.log(res.data);
+
+            setSuccess("Account created successfully!");
+
+            setForm({
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: "",
+                isSeller: false,
+            });
+        } catch (err: any) {
+            console.error(err.response?.data);
+
+            if (err.response?.data?.errors?.length) {
+                setError(err.response.data.errors[0].msg);
+            } else {
+                setError(err.response?.data?.msg || "Something went wrong.");
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <>
             <BreadCrumb />
-            <div className='py-12 bg-gray-100 flex items-center justify-center px-4'>
-                <div className='bg-white raounded-2xl shadow-sm p-10 w-full max-w-md'>
-                    {/* { Header } */}
-                    <div className='text-center mb-8'>
-                        <h1 className='text-3xl font-bold text-gray-900 mb-2'>
-                            Create Account
-                        </h1>
 
-                        <p className='text-gray-400 text-sm'>
-                            Fill in the details below to get sarted.
+            <div className="py-12 bg-gray-100 flex justify-center items-center px-4">
+                <div className="bg-white rounded-2xl shadow-md p-10 w-full max-w-md">
+
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold">Create Account</h1>
+                        <p className="text-gray-500 mt-2">
+                            Fill in the details below to get started.
                         </p>
                     </div>
 
                     {error && (
-                        <div className='mb-4 text-sm text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-3'>
+                        <div className="mb-4 bg-red-100 border border-red-300 text-red-600 rounded-lg p-3">
                             {error}
                         </div>
                     )}
 
-                    <form
-                        onSubmit={handleSubmit}
-                        className="space-y-4">
-                        {/* <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-                        <p>Please create an account using the details below.</p> */}
+                    {success && (
+                        <div className="mb-4 bg-green-100 border border-green-300 text-green-600 rounded-lg p-3">
+                            {success}
+                        </div>
+                    )}
 
-                        <div className='flex gap-3'>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+
+                        <div className="flex gap-3">
 
                             <input
                                 type="text"
-                                name='firstName'
+                                name="firstName"
                                 placeholder="First Name"
                                 value={form.firstName}
                                 onChange={handleChange}
                                 required
-                                className="w-1/2 border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                                className="w-1/2 border rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-400 outline-none"
                             />
 
                             <input
                                 type="text"
-                                name='lastName'
+                                name="lastName"
                                 placeholder="Last Name"
                                 value={form.lastName}
                                 onChange={handleChange}
-                                aria-required
-                                className="w-1/2 border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                                required
+                                className="w-1/2 border rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-400 outline-none"
                             />
+
                         </div>
 
                         <input
                             type="email"
                             name="email"
-                            placeholder="Email"
+                            placeholder="Email Address"
                             value={form.email}
                             onChange={handleChange}
                             required
-                            className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                            className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-400 outline-none"
                         />
-
 
                         <input
                             type="password"
@@ -110,74 +317,66 @@ export default function SignUpForm() {
                             value={form.password}
                             onChange={handleChange}
                             required
-                            className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                            minLength={6}
+                            className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-400 outline-none"
                         />
 
+                        <label className="flex items-center gap-3 cursor-pointer">
 
-                        {/* <input
-                                type="password"
-                                name="confirmPassword"
-                                placeholder="Confirm Password"
-                                value={form.confirmPassword}
+                            <input
+                                type="checkbox"
+                                name="isSeller"
+                                checked={form.isSeller}
                                 onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            /> */}
+                                className="hidden peer"
+                            />
 
-                        {/* isSeller checkbox */}
-                        <label className='flex items-center gap-3 cursor-pointer select-none group'>
-                            <div className='relative flex items-center'>
-                                <input
-                                    type="checkbox"
-                                    name="isSeller"
-                                    checked={form.isSeller}
-                                    onChange={handleChange}
-                                    className='peer sr-only'
-                                />
+                            <div className="w-5 h-5 border rounded flex justify-center items-center peer-checked:bg-pink-500 peer-checked:border-pink-500">
 
-                                {/* Custom checkbox */}
-                                <div className='w-5 h-5 rounded border border-gray-300 peer-checked:bg-secondary peer-checked:border-secondary transition-colors duration-200 flex items-center justify-center'>
-                                    {form.isSeller && (
-                                        <svg className='w-3 h-3 text-white'
-                                            fill="none"
-                                            viewBox='0 0 24 24'
-                                            stroke="currentColor"
-                                            strokeWidth={3}>
-                                            <path strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M5 1314 4L19 7"
-                                            />
-                                        </svg>
-                                    )}
-                                </div>
+                                {form.isSeller && (
+                                    <svg
+                                        className="w-3 h-3 text-white"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth={3}
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M5 13l4 4L19 7"
+                                        />
+                                    </svg>
+                                )}
+
                             </div>
 
-                            <div>
-                                <span className='text-sm text-gray-700 font-medium'>
-                                    Register as a Seller
-                                </span>
-                                <p className='text-xs text-gray-400 mt-0.5'>
-                                    List and sell your own products on the platform.
-                                </p>
-                            </div>
+                            <span>Register as Seller</span>
+
                         </label>
+
                         <button
-                            type='submit'
+                            type="submit"
                             disabled={loading}
-                            className='w-full bg-secondary hover:bg-pink-600 disabled:opacity-60 text-white font-semibold py-3.5 rounded-lg transition-colors duration-200'>
-                            {loading ? "Creating account..." : "Create Account"}
-                        </button>
-                    </form>
-                    <p className='text-center text-sm text-gray-400 mt-6'>
-                        Already have an account?(" ")
-                        <a
-                            href="/login"
-                            className='text-secondary hover:underline font-medium'
+                            className="w-full bg-pink-500 hover:bg-pink-600 text-white rounded-lg py-3 disabled:opacity-60"
                         >
-                            Sign in
-                        </a>
+                            {loading ? "Creating Account..." : "Create Account"}
+                        </button>
+
+                    </form>
+
+                    <p className="text-center mt-6 text-gray-500">
+                        Already have an account?{" "}
+                        <Link
+                            to="/login"
+                            className="text-pink-500 font-semibold hover:underline"
+                        >
+                            Sign In
+                        </Link>
                     </p>
+
                 </div>
-            </div >
+            </div>
         </>
     );
 }

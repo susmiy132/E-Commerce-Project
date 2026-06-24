@@ -1,112 +1,94 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-type LoginFormType = {
-    email: string;
-    password: string;
+import axios from "axios";
+import BreadCrumb from "../components/BreadCrumb";
+type propsType = {
+    setIsLoggedIn: (status: boolean) => void;
 };
 
-export default function LoginForm() {
-
-    const [formData, setFormData] = useState<LoginFormType>({
-        email: "",
-        password: "",
-    });
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(" ");
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+export default function LoginForm({ setIsLoggedIn }: propsType) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
-
-        if (!formData.email || !formData.password) {
-            setError("All fields are required");
-            return;
-        }
-
-        setLoading(true);
-
-        // fake API call
-        setTimeout(() => {
-            console.log("Login Data:", formData);
-            setLoading(false);
-
-            // after login redirect (example dashboard)
-            alert("Login successful");
-        }, 1500);
+        axios
+            .post("https://ecom-zb9o.vercel.app/api/login", {
+                email: email,
+                password: password,
+            })
+            .then((res) => {
+                setIsLoggedIn(true);
+                console.log("login successfull");
+            })
+            .catch((err) => {
+                console.log(err.response.data.msg);
+                alert(err.response.data.msg)
+            });
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-xl shadow-md">
+        <>
+            <BreadCrumb />
+            <div className="py-12 bg-gray-100 flex items-center justify-center px-4">
+                <div className="bg-white rounded-2xl shadow-sm p-10 w-full max-w-md">
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Login</h1>
+                        <p className="text-gray-400 text-sm">
+                            Please login using account detail bellow
+                        </p>
+                    </div>
 
-                <h2 className="text-2xl font-bold text-center text-gray-800">
-                    Welcome Back
-                </h2>
+                    {/* field */}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                        />
 
-                <p className="text-center text-sm text-gray-500 mt-1">
-                    Login to your account
-                </p>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full border border-gray-200 rounded-lg py-3.5 px-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400"
+                        />
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                        {/* Forgot Password  */}
+                        <div className="text-left">
+                            <a
+                                href="/forgot-password"
+                                className="text-sm text-secondary hover:underline"
+                            >
+                                Forgot your password?
+                            </a>
+                        </div>
 
-                    {/* Email */}
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
+                        {/* Submit */}
+                        <button
+                            type="submit"
+                            className="w-full bg-secondary hover:bg-pink-600 text-white font-semibold py-3.5 rounded-lg transition-colors duration-200">
+                            Sign In
+                        </button>
+                    </form>
 
-                    {/* Password */}
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
-
-                    {/* Error */}
-                    {error && (
-                        <p className="text-sm text-red-500">{error}</p>
-                    )}
-
-                    {/* Button */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
-                    >
-                        {loading ? "Logging in..." : "Login"}
-                    </button>
-                </form>
-
-                {/* Footer */}
-                <p className="text-center text-sm text-gray-500 mt-4">
-                    Don't have an account?{" "}
-                    <button
-                        type="button"
-                        className="text-red-600 hover:underline"
-                    >
-                        <Link to="/register">SignUp</Link>
-                    </button>
-                </p>
-
+                    {/* Register link */}
+                    <p className="text-center text-sm text-gray-400 mt-6">
+                        Don't have an Account?{" "}
+                        <a
+                            href="/register"
+                            className="text-secondary hover:underline font-medium"
+                        >
+                            Create account
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
+        </>
     );
-}
+
+};
