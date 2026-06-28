@@ -120,6 +120,7 @@
 
 import React, { useState } from "react";
 import { ShoppingCart, Heart, ZoomIn, ChevronDown, LayoutGrid, List } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Product {
     id: number;
@@ -193,6 +194,12 @@ export default function ProductListing() {
     return (
         <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
+                <Link to="/products/detail">
+                    <div className="border p-4 cursor-pointer">
+                        <h2>Leather Bag</h2>
+                        <p>$32</p>
+                    </div>
+                </Link>
                 {/* Header */}
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-6 mb-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
