@@ -18,6 +18,14 @@ export default function LoginForm({ setIsLoggedIn }: propsType) {
                 password: password,
             })
             .then((res) => {
+                console.log(res.data);
+
+                // save token
+                // localStorage.setItem("token", res.data.token);
+
+                // save user object
+                // localStorage.setItem("user", JSON.stringify(res.data.user));
+
                 setIsLoggedIn(true);
                 console.log("login successfull");
             })
