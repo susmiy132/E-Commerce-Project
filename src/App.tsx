@@ -7,7 +7,7 @@ import { Component } from 'lucide-react'
 import LoginForm from './pages/Login'
 import SignUpForm from './pages/SignUp'
 import ProductDetails from './pages/products/ProductDetails'
-import { ProductListing } from './pages/products/ProductListing'
+import ProductListing from './pages/products/ProductListing'
 
 function App() {
 
