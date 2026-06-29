@@ -1,8 +1,10 @@
 import React from "react";
+import Header from "../components/layouts/Header";
 import Banner from "../assets/banner.png";
 
 
 export default function Home() {
+    console.log("render HOOOOOOOME")
     return (
         <>
             <div className=""></div>
@@ -28,6 +30,8 @@ export default function Home() {
                     {[1, 2, 3, 4].map((el) => (
                         <div key={el} className="border p-5">
                             <p>Products</p>
+
+                            <button>ADD TO CART</button>
                         </div>
                     ))}
                 </div>
