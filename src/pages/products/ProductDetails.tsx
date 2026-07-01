@@ -34,10 +34,7 @@ function ProductDetail() {
                         title: "products",
                         link: "/products",
                     },
-                    {
-                        title: product?.title,
-                        link: `/products/${product?.id}`,
-                    },
+
                 ]}
             />
             <div className="container">

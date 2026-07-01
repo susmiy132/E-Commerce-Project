@@ -5,14 +5,27 @@ import axios from "axios";
 import { Heart, ShoppingCart } from "lucide-react";
 // import { URLSearchParams } from "url";
 
+interface Category {
+    id: number;
+    title: string;
+}
+
+interface Product {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    categoryId: number;
+}
+
 function ProductListing() {
     const location = useLocation();
     console.log(location.pathname);
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [categories, setCategories] = useState([]);
-    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [isProductsLoading, setIsProductsLoading] = useState(true);
     // const [perPage, setPerPage] = useState(20);
     // const [sortBy, setSortBy] = useState("");
@@ -73,26 +86,15 @@ function ProductListing() {
 
     // http://localhost:5173/products?perPage=2
 
-    const handlePerPageChange = (e) => {
-        e.target.value;
-        // setFilter(prev => ({...prev,perPage:e.targt.value}))
-        setFilter({ ...filter, perPage: e.target.value });
-        // setPerPage(e.target.value);
-        // console.log(e.target.value);
-
-        // http://localhost:5173/products?q="mouse"
-        // http://localhost:5173/products?perPage=5
-
-        // http://localhost:5173/products?q="mouse"&perPage=5
-
-        // setSearchParams({
-        //   perPage: e.target.value,
-        // });
+    const handlePerPageChange = (
+        e: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+        setFilter({ ...filter, perPage: Number(e.target.value) });
 
         setSearchParams((prev) => {
-            let urlParms = new URLSearchParams(prev);
-            urlParms.set("perPage", e.target.value);
-            return urlParms;
+            const urlParams = new URLSearchParams(prev);
+            urlParams.set("perPage", e.target.value);
+            return urlParams;
         });
     };
 
