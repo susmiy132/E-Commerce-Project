@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 import { Navigate, useNavigate } from "react-router";
+import BreadCrumb from "../components/BreadCrumb";
 
 function Orders() {
     // const user = useSelector((state: RootState) => state.user.value);
@@ -31,6 +32,9 @@ function Orders() {
     return (
         <div className="carts">
             <>
+                <BreadCrumb
+
+                />
                 <p>CARTS 1</p>
                 <p>CARTS 1</p>
                 <p>CARTS 1</p>
