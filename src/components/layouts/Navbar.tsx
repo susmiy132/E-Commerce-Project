@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
-import { logout, setUser } from "../../redux/features/userSlice";
 
 function Navbar() {
     console.log("render | re-render NAVBAR");
