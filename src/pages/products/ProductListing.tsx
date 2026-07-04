@@ -85,8 +85,6 @@ function ProductListing() {
         }
     };
 
-    // http://localhost:5173/products?perPage=2
-
     const handlePerPageChange = (
         e: React.ChangeEvent<HTMLSelectElement>
     ) => {
