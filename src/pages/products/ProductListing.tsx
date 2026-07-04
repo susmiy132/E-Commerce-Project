@@ -3,7 +3,6 @@ import BreadCrumb from "../../components/BreadCrumb";
 import { Link, useLocation, useSearchParams } from "react-router";
 import axios from "axios";
 import { Heart, ShoppingCart } from "lucide-react";
-// import { URLSearchParams } from "url";
 
 interface Category {
     id: number;
@@ -16,6 +15,10 @@ interface Product {
     description: string;
     price: number;
     categoryId: number;
+    stock: number;
+    isFeatured: boolean;
+    userId: number;
+    status: string;
 }
 
 function ProductListing() {
@@ -27,8 +30,6 @@ function ProductListing() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [isProductsLoading, setIsProductsLoading] = useState(true);
-    // const [perPage, setPerPage] = useState(20);
-    // const [sortBy, setSortBy] = useState("");
 
     const [searchParams, setSearchParams] = useSearchParams();
 

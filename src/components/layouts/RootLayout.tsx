@@ -14,7 +14,7 @@ export default function RootLayout() {
         <>
             <div className="font-lato">
                 <TopHeader />
-                <Navbar />
+                {/* <Navbar /> */}
                 <Outlet />
                 <Footer />
             </div>
