@@ -2,6 +2,42 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Package } from "lucide-react";
 
+interface Seller {
+    firstName: string;
+    lastName: string;
+}
+
+interface OrderItem {
+    id: string;
+    productTitle: string;
+    quantity: number;
+    price: number;
+}
+
+interface SubOrder {
+    id: string;
+    status: string;
+    subTotal: string;
+    deliveryCharge: string;
+    seller: Seller;
+    orderItems: OrderItem[];
+}
+
+interface Order {
+    id: string;
+    reference: string;
+    status: string;
+    paymentStatus: string;
+    createdAt: string;
+    phone: string;
+    address: string;
+    secondaryAddress?: string;
+    paymentMode: string;
+    subOrders: SubOrder[];
+}
+
+
+
 const statusColors = {
     pending: "bg-yellow-100 text-yellow-700",
     processing: "bg-blue-100 text-blue-700",
@@ -16,10 +52,12 @@ const paymentStatusColors = {
 };
 
 export default function OrdersPage() {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [expanded, setExpanded] = useState({});
+
+
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const fetchOrders = () => {
         setLoading(true);
@@ -40,19 +78,25 @@ export default function OrdersPage() {
         fetchOrders();
     }, []);
 
-    const toggleExpand = (orderId) => {
-        setExpanded((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
+    const toggleExpand = (orderId: string) => {
+        setExpanded((prev) => ({
+            ...prev,
+            [orderId]: !prev[orderId],
+        }));
     };
 
-    const orderTotal = (order) =>
+    const orderTotal = (order: Order) =>
         order.subOrders.reduce(
-            (sum, sub) =>
+            (sum: number, sub: SubOrder) =>
                 sum + parseFloat(sub.subTotal) + parseFloat(sub.deliveryCharge),
-            0,
+            0
         );
 
-    const orderItemCount = (order) =>
-        order.subOrders.reduce((sum, sub) => sum + sub.orderItems.length, 0);
+    const orderItemCount = (order: Order) =>
+        order.subOrders.reduce(
+            (sum: number, sub: SubOrder) => sum + sub.orderItems.length,
+            0
+        );
 
     if (loading) {
         return (
@@ -63,7 +107,7 @@ export default function OrdersPage() {
     if (error) {
         return (
             <div className="p-10 text-center text-red-500">
-                Failed to load orders: {error}
+                Failed to load orders: "{error}"
             </div>
         );
     }
