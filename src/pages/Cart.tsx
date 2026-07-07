@@ -2,13 +2,31 @@ import { useEffect, useState } from "react";
 import { X, Minus, Plus } from "lucide-react";
 import axios from "axios";
 
+interface CartItem {
+    id: number;
+    productId: number;
+    name: string;
+    price: number;
+    qty: number;
+    stock: number;
+    img: string;
+    sellerId: number;
+    sellerName: string;
+    shippingCharge: number;
+}
+
+interface SellerShipping {
+    sellerId: number;
+    shippingCharge: number;
+}
+
 const PLACEHOLDER_IMG =
     "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=200&h=200&fit=crop";
 
 export default function CartPage() {
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [items, setItems] = useState<CartItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchCarts = () => {
         axios
@@ -18,7 +36,7 @@ export default function CartPage() {
                 },
             })
             .then((res) => {
-                const mapped = res.data.data.map((cartItem) => ({
+                const mapped = res.data.data.map((cartItem: any) => ({
                     id: cartItem.id, // cart row id, used for update/remove
                     productId: cartItem.productId,
                     name: cartItem.product.title,
@@ -42,10 +60,10 @@ export default function CartPage() {
         fetchCarts();
     }, []);
 
-    const updateQty = (productId, id, quantity) => {
+    const updateQty = (productId: number, id: number, quantity: number) => {
         console.log({ quantity });
         setItems((prev) =>
-            prev.map((it) =>
+            prev.map((it: CartItem) =>
                 it.id === id
                     ? { ...it, qty: Math.min(it.stock, Math.max(1, quantity)) }
                     : it,
@@ -68,15 +86,15 @@ export default function CartPage() {
             });
     };
 
-    const removeItem = (id) => {
-        setItems((prev) => prev.filter((it) => it.id !== id));
+    const removeItem = (id: number) => {
+        setItems((prev) => prev.filter((it: CartItem) => it.id !== id));
         // TODO: persist to backend, e.g.
         // axios.delete(`https://ecom-zb9o.vercel.app/api/carts/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
     };
 
     const clearCart = () => setItems([]);
 
-    const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
+    const subtotal = items.reduce((sum: number, it: CartItem) => sum + it.price * it.qty, 0);
 
     // Shipping: one flat charge per distinct seller in the cart
 
@@ -84,7 +102,7 @@ export default function CartPage() {
     //   new Map(items.map((it) => [it.sellerName, it.shippingCharge])).values(),
     // ).reduce((sum, charge) => sum + charge, 0);
 
-    let distinctSellers = [
+    let distinctSellers: SellerShipping[] = [
         // {sellerId:1,shippingCarge:100},
         // {sellerId:2,shippingCarge:50}
     ];
@@ -110,7 +128,7 @@ export default function CartPage() {
 
     const total = subtotal + shipping;
 
-    const placeOrder = (e) => {
+    const placeOrder = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         axios
@@ -140,7 +158,51 @@ export default function CartPage() {
                     },
                 },
             )
-            .then((res) => { })
+            .then((res) => {
+                // axios.post(
+                //   "https://dev.khalti.com/api/v2/epayment/initiate/",
+                //   {
+                //     return_url: "http://example.com/",
+                //     website_url: "https://example.com/",
+                //     amount: "1000",
+                //     purchase_order_id: "Order01",
+                //     purchase_order_name: "test",
+                //     customer_info: {
+                //       name: "Ram Bahadur",
+                //       email: "test@khalti.com",
+                //       phone: "9800000001",
+                //     },
+                //   },
+                //   {
+                //     headers: {
+                //       Authorization: "key a2d75bcf2a724cf6868a143deb6b8c2c",
+                //       "Content-Type": "application/json",
+                //     },
+                //   },
+                // );
+                // similar to eswa: create form and append fiels for khalit
+
+                // return;
+                const esewaData = res.data.data.esewa;
+
+                const esewaForm = document.createElement("form");
+                esewaForm.setAttribute(
+                    "action",
+                    "https://rc-epay.esewa.com.np/api/epay/main/v2/form",
+                );
+                esewaForm.setAttribute("method", "POST");
+
+                Object.entries(esewaData).forEach(([key, value]) => {
+                    const input = document.createElement("input");
+                    input.setAttribute("type", "hidden");
+                    input.setAttribute("name", key);
+                    input.setAttribute("value", value as string);
+                    esewaForm.appendChild(input);
+                });
+
+                document.body.appendChild(esewaForm);
+                esewaForm.submit();
+            })
             .catch((err) => { })
             .finally(() => { });
     };
