@@ -1,54 +1,4 @@
 
-// import React, { useState } from 'react'
-// import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-// import Home from './pages/Home'
-// import RootLayout from './components/layouts/RootLayout'
-// import { Component } from 'lucide-react'
-// import LoginForm from './pages/Login'
-// import SignUpForm from './pages/SignUp'
-// import ProductDetails from './pages/products/ProductDetails'
-// import ProductListing from './pages/products/ProductListing'
-
-// function App() {
-
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const router = createBrowserRouter([
-//     {
-//       path: "",
-
-//       element: <RootLayout isLoggedIn={isLoggedIn} />,
-//       children: [
-//         { path: "/", Component: Home },
-//         {
-//           path: "/login",
-//           element: <LoginForm setIsLoggedIn={setIsLoggedIn} />
-//         },
-//         { path: "/register", Component: SignUpForm },
-//         {
-//           path: "/products",
-//           children: [
-//             {
-//               path: "",
-//               Component: ProductListing,
-//             },
-//             {
-//               path: "detail",
-//               Component: ProductDetails
-
-//             }
-//           ]
-//         }
-//       ]
-//     }])
-//   return (
-//     <>
-//       <RouterProvider router={router} />
-//     </>
-//   )
-// }
-
-// export default App
-
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -63,6 +13,13 @@ import { useDispatch } from "react-redux";
 import Carts from "./pages/Cart";
 import ProtectedRoute from "./components/layouts/ProtectedRoute";
 import Orders from "./pages/Orders";
+import AddProduct from "./pages/seller/AddProduct";
+import SellerProducts from "./pages/seller/SellerProduct";
+import OrderSuccess from "./pages/OrderSuccess";
+import Categories from "./pages/admin/Catagories";
+import Dashboard from "./pages/admin/Dashboard";
+import AdminLayout from "./components/layouts/AdminLayout";
+import AdminProducts from "./pages/admin/AdminProducts";
 
 function App() {
   let token = localStorage.getItem("token");
@@ -84,10 +41,44 @@ function App() {
         .finally(() => {
           setIsLoading(false);
         });
+
+      axios
+        .get("https://ecom-zb9o.vercel.app/api/carts", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+        })
+        .then((res) => {
+
+        });
     }
   }, []);
 
   const router = createBrowserRouter([
+    {
+      path: "admin",
+      element: <ProtectedRoute forAdmin={true} />,
+      children: [
+        {
+          path: "",
+          element: <AdminLayout />,
+          children: [
+            {
+              path: "dashboard",
+              Component: Dashboard,
+            },
+            {
+              path: "products",
+              Component: AdminProducts,
+            },
+            {
+              path: "categories",
+              Component: Categories,
+            }
+          ]
+        }
+      ]
+    },
     {
       path: "",
       // Component: RootLayout,
@@ -96,7 +87,6 @@ function App() {
         { path: "/", Component: Home },
         {
           path: "/login",
-          //  Component: Login\
           element: <Login />,
         },
         { path: "/register", Component: Signup },
@@ -125,8 +115,21 @@ function App() {
               path: "/orders",
               Component: Orders,
             },
+            {
+              path: "/order-success",
+              Component: OrderSuccess,
+            }
           ],
         },
+        {
+          path: "seller",
+          Component: SellerProducts,
+        },
+        {
+          path: "add-product",
+          Component: AddProduct
+        }
+
       ],
     },
   ]);
