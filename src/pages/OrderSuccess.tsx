@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Check } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
 function OrderSuccess() {
     const [isLoading, setIsLoading] = useState(true);
