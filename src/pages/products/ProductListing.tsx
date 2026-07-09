@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../components/BreadCrumb";
-import { Link, useLocation, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Heart, ShoppingCart } from "lucide-react";
 
@@ -22,6 +22,7 @@ interface Product {
 }
 
 function ProductListing() {
+    const navigate = useNavigate();
     const location = useLocation();
     console.log(location.pathname);
 
@@ -78,10 +79,15 @@ function ProductListing() {
                     },
                 )
                 .then((res) => {
-                    console.log("added to cart");
+                    console.log("Add to Cart Success:", res.data);
+                    navigate("/carts");
+                })
+                .catch((err) => {
+                    console.log("Add to Cart Error:", err.response?.data);
                 });
         } else {
-            console.log("login required..");
+            console.log("Login required");
+            navigate("/login");
         }
     };
 
@@ -154,7 +160,7 @@ function ProductListing() {
                         </p>
                         {categories.map((el) => {
                             return (
-                                <div>
+                                <div key={el.id}>
                                     <input
                                         id={`category-${el.id}`}
                                         type="checkbox"
@@ -178,6 +184,7 @@ function ProductListing() {
                                     products.map((el) => {
                                         return (
                                             <Link
+                                                key={el.id}
                                                 to={`/products/${el.id}`}
                                                 className="mt-8 flex gap-6 rounded-2xl bg-white p-5 shadow-md transition-shadow duration-300 hover:shadow-lg sm:mt-9 sm:p-4 lg:mt-9"
                                             >

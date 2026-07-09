@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import BreadCrumb from "../../components/BreadCrumb";
 import axios from "axios";
-import { useSearchParams, useParams } from "react-router";
+import { useSearchParams, useParams } from "react-router-dom";
 
 interface Product {
     id: number;
