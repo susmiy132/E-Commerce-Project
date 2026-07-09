@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Header from "../components/layouts/Header";
+// import Header from "../components/layouts/Header";
 import BreadCrumb from "../components/BreadCrumb";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { setUser } from "../redux/features/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -27,13 +27,14 @@ export default function Login() {
             })
             .then((res) => {
                 // react toasting..
-                // navigate("/");
+                navigate("/");
                 localStorage.setItem("token", res.data.token);
                 dispatch(setUser(res.data.user));
+                console.log("Login Response:", res.data);
 
                 // setUser()
                 // setIsLoggedIn(true);
-                console.log("logoin sucucessfulll");
+                console.log("login sucucessfulll");
             })
             .catch((err) => {
                 console.log(err.response.data.msg);
