@@ -29,32 +29,78 @@ export default function CartPage() {
     const [error, setError] = useState<string | null>(null);
 
     const fetchCarts = () => {
-        axios
-            .get("https://ecom-zb9o.vercel.app/api/carts", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            })
-            .then((res) => {
-                const mapped = res.data.data.map((cartItem: any) => ({
-                    id: cartItem.id, // cart row id, used for update/remove
-                    productId: cartItem.productId,
-                    name: cartItem.product.title,
-                    price: parseFloat(cartItem.product.price),
-                    qty: cartItem.quantity,
-                    stock: cartItem.product.stock,
-                    img: cartItem.product.images?.[0] || PLACEHOLDER_IMG,
-                    sellerId: cartItem.product.user.id,
-                    sellerName: cartItem.product.user.firstName,
-                    shippingCharge: parseFloat(
-                        cartItem.product.user.shipping_charge || 0,
-                    ),
-                }));
-                setItems(mapped);
-            })
-            .catch((err) => setError(err.message))
-            .finally(() => setLoading(false));
+        console.log(localStorage.getItem("token"));
+        //     axios
+        //         .get("https://ecom-zb9o.vercel.app/api/carts", {
+        //             headers: {
+        //                 Authorization: `Bearer ${localStorage.getItem("token")}`,
+        //             },
+        //         })
+        //         .then((res) => {
+        //             console.log("Cart Response:", res.data);
+        //             const mapped = res.data.data.map((cartItem: any) => ({
+        //                 id: cartItem.id, // cart row id, used for update/remove
+        //                 productId: cartItem.productId,
+        //                 name: cartItem.product.title,
+        //                 price: parseFloat(cartItem.product.price),
+        //                 qty: cartItem.quantity,
+        //                 stock: cartItem.product.stock,
+        //                 img: cartItem.product.images?.[0] || PLACEHOLDER_IMG,
+        //                 sellerId: cartItem.product.user.id,
+        //                 sellerName: cartItem.product.user.firstName,
+        //                 shippingCharge: parseFloat(
+        //                     cartItem.product.user.shipping_charge || 0,
+        //                 ),
+        //             }));
+        //             setItems(mapped);
+        //         })
+        //         .catch((err) => setError(err.message))
+        //         .finally(() => setLoading(false));
+        const fetchCarts = () => {
+            console.log(localStorage.getItem("token"));
+
+            axios
+                .get("https://ecom-zb9o.vercel.app/api/carts", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                })
+                .then((res) => {
+                    console.log("Cart Response", res.data);
+                    console.log("FULL RESPONSE");
+                    console.log(res);
+                    console.log(res.data);
+                    console.log(res.data.data);
+
+                    setLoading(false);
+
+                    const mapped = res.data.data.map((cartItem: any) => ({
+                        id: cartItem.id,
+                        productId: cartItem.productId,
+                        name: cartItem.product.title,
+                        price: Number(cartItem.product.price),
+                        qty: cartItem.quantity,
+                        stock: cartItem.product.stock,
+                        img: cartItem.product.images?.[0] || PLACEHOLDER_IMG,
+                        sellerId: cartItem.product.user.id,
+                        sellerName: cartItem.product.user.firstName,
+                        shippingCharge:
+                            Number(cartItem.product.user.shippingCharge) || 0,
+                    }));
+
+                    setItems(mapped);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    console.log(err.response);
+                    console.log(err.response?.data);
+                    console.log(err.response?.status);
+
+                    setLoading(false);
+                });
+        };
     };
+
 
     useEffect(() => {
         fetchCarts();
@@ -89,7 +135,17 @@ export default function CartPage() {
     const removeItem = (id: number) => {
         setItems((prev) => prev.filter((it: CartItem) => it.id !== id));
         // TODO: persist to backend, e.g.
-        // axios.delete(`https://ecom-zb9o.vercel.app/api/carts/${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+        axios.delete(
+            `https://ecom-zb9o.vercel.app/api/carts/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        )
+            .then(() => {
+                fetchCarts();
+            });
     };
 
     const clearCart = () => setItems([]);
