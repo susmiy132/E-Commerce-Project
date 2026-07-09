@@ -26,8 +26,9 @@ interface SubOrder {
 interface Order {
     id: string;
     reference: string;
-    status: string;
-    paymentStatus: string;
+    // status: string;
+    status: "pending" | "processing" | "Shipped" | "Delivered" | "Cancelled";
+    paymentStatus: "paid" | "unpaid";
     createdAt: string;
     phone: string;
     address: string;
@@ -36,9 +37,7 @@ interface Order {
     subOrders: SubOrder[];
 }
 
-
-
-const statusColors = {
+const statusColors: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-700",
     processing: "bg-blue-100 text-blue-700",
     shipped: "bg-indigo-100 text-indigo-700",
