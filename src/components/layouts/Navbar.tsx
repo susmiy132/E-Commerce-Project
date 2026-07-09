@@ -3,7 +3,7 @@ import { ChevronDown, Search, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import type { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 function Navbar() {
     console.log("render | re-render NAVBAR");
