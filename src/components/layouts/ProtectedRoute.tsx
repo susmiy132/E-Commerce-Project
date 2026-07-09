@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Outlet, Router, useNavigate } from "react-router";
+import { Navigate, Outlet, Router, useNavigate } from "react-router-dom";
 import type { RootState } from "../../redux/store";
 
 
@@ -12,6 +12,7 @@ function ProtectedRoute({
     forAdmin?: boolean;
 }) {
     const user = useSelector((state: RootState) => state.user.value);
+    console.log("Protected user:", user);
     if (user) {
         if (forSeller) {
             if (user.isSeller) {
